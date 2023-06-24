@@ -1,0 +1,35 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>c:\olympus\logs\app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>c:\olympus\logs\app.log_%d{yyyy-MM-dd}.txt</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+
+<!--    <logger name="jdbc" level="OFF"/>-->
+<!--    <logger name="jdbc.sqlonly" level="INFO"/>-->
+<!--    <logger name="jdbc.sqltiming" level="INFO"/>-->
+<!--    <logger name="jdbc.audit" level="OFF"/>-->
+<!--    <logger name="jdbc.resultset" level="OFF"/>-->
+<!--    <logger name="jdbc.resultsettable" level="INFO"/>-->
+<!--    <logger name="jdbc.connection" level="INFO"/>-->
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="file"/>
+    </root>
+
+</configuration>
