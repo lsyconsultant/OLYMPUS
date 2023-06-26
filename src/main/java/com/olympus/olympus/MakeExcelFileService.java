@@ -5,8 +5,10 @@ import com.olympus.olympus.msGraphAPI.dto.FolderDTO;
 import com.olympus.olympus.msGraphAPI.service.MsGraphApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Header;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -22,12 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import static org.apache.poi.ss.usermodel.DataValidationConstraint.ValidationType.FORMULA;
+import java.util.*;
 
 
 @Service
@@ -41,9 +38,9 @@ public class MakeExcelFileService {
     private String projectFolder;
 
 
-    @Scheduled(fixedDelay = 60000) // 10초마다 실행
+    @Scheduled(fixedDelay = 6000000) // 10초마다 실행
     public void scheduleExecute() {
-        execute("202304");
+        execute("202305");
     }
 
     public void execute(String yyyymm) {
@@ -77,17 +74,17 @@ public class MakeExcelFileService {
         log.info("==> 4단계 : [MS Graph API] 매출데이터 파일을 로컬로 다운로드");
 //        Map<String, String> localExcelFiles = fileUrlDownloadToLocalPath(folderSubFiles);
         Map<String, String> localExcelFiles = new HashMap<>();
-        localExcelFiles.put("folderPath", "c:\\olympus\\20230623-142719");
-        localExcelFiles.put("baseFilePath", "c:\\olympus\\20230623-142719\\202305_OKR_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OVN_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OVN_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OAZ_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OAZ_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OTH_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OTH_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OHC_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OHC_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OSP_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OSP_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OMSI_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OMSI_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OML_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OML_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OKR_GIET_sales.xlsx", "c:\\olympus\\20230623-142719\\202305_OKR_GIET_sales.xlsx");
-        log.info("매출데이터 로컬 PC에 다룬로 완료 : ", localExcelFiles);
+        localExcelFiles.put("folderPath", "c:\\olympus\\20230626-160910");
+        localExcelFiles.put("baseFilePath", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OVN_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OVN_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OAZ_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OAZ_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OTH_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OTH_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OHC_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OHC_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OSP_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OSP_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OMSI_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OMSI_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OML_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OML_GIET_sales.xlsx");
+        localExcelFiles.put("202305_OKR_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
+        log.info("매출데이터 로컬 PC에 다운로드 완료 : ", localExcelFiles);
 
 
         log.info("==> 5단계 : 매출데이터 파일들을 하나로 병합");
@@ -109,10 +106,10 @@ public class MakeExcelFileService {
         localExcelFiles.remove("baseFilePath");
 
         //엑셀 객체 초기화
-        XSSFWorkbook workbook = new XSSFWorkbook();
+        SXSSFWorkbook workbook = new SXSSFWorkbook(500);
 
         //시트 생성
-        XSSFSheet sheet = workbook.createSheet("지사 매출데이터 병합");
+        SXSSFSheet sheet = (SXSSFSheet) workbook.createSheet("지사 매출데이터 병합");
 
         //헤더 생성
         log.info("=> 헤더 생성 시작");
@@ -121,19 +118,34 @@ public class MakeExcelFileService {
 
         //데이터 생성
         log.info("=> 데이터 생성 시작");
-        createDataRow(sheet, localExcelFiles);
+        ArrayList<List<String>> data = createDataRow(localExcelFiles);
         log.info("=> 데이터 생성 완료");
 
         //Merge 엑셀 파일 생성
         log.info("=> Merge 엑셀 파일 생성 시작");
-        File file = new File(folderPath+"\\매출데이터 병합본.xlsx");
+        for (int i = 0; i < data.size(); i++) {
+//            log.info("=> 작업 로우 번호 : {}", i + 1);
+            List<String> rowData = data.get(i);
+
+            SXSSFRow row = (SXSSFRow) sheet.createRow(i + 1);
+            for (int j = 0; j < rowData.size(); j++) {
+                String cellData = rowData.get(j);
+                SXSSFCell cell = (SXSSFCell) row.createCell(j);
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellValue(cellData);
+            }
+        }
+
+        File file = new File(folderPath+"\\매출통합본.xlsx");
         FileOutputStream fileout = new FileOutputStream(file);
         workbook.write(fileout);
+        fileout.close();
         log.info("=> Merge 엑셀 파일 생성 종료");
 
     }
 
-    private void createDataRow(XSSFSheet sheet, Map<String, String> localExcelFiles) throws IOException {
+    private ArrayList<List<String>> createDataRow(Map<String, String> localExcelFiles) throws IOException {
+        ArrayList<List<String>> result = new ArrayList<>();
 
         Iterator iterator = localExcelFiles.keySet().iterator();
         while (iterator.hasNext()) {
@@ -147,22 +159,17 @@ public class MakeExcelFileService {
             XSSFWorkbook excel = new XSSFWorkbook(file);
 
             XSSFSheet tmpSheet = excel.getSheetAt(0);
-            int lastRowNum = tmpSheet.getLastRowNum();
 
-            int sheetLastRow = sheet.getLastRowNum();
-            log.info("=> 생성하는 엑셀파일의 시작 로우 마지막 번호 : {}", sheetLastRow);
-            for (int i = 1; i < lastRowNum; i++) {
-                XSSFRow row = sheet.createRow(sheetLastRow + i);
-                XSSFCell cell = row.createCell(0);
-                cell.setCellValue(orgId);
+            log.info("=> 작업 파일 작업 로우 갯수 : {}", tmpSheet.getLastRowNum());
+            for (int i = 1; i < tmpSheet.getLastRowNum()+1; i++) {
+//                log.info("=> 작업 로우 번호 : {}", i);
+
+                List<String> rowData = new ArrayList<>();
+                rowData.add(orgId);
 
                 XSSFRow tmpRow = tmpSheet.getRow(i);
                 for (int j = 0; j < tmpRow.getLastCellNum(); j++) {
                     XSSFCell tmpCell = tmpRow.getCell(j);
-//                    log.info("=> 셀 위치 : (" + (sheetLastRow + i) + "," + (j + 1) + "), 셀 타입 : " + tmpCell.getCellType() + ", 셀 값 : " + tmpCell.toString());
-
-                    cell = row.createCell(j + 1);
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
 
                     try {
                         String value = "";
@@ -183,20 +190,21 @@ public class MakeExcelFileService {
                                 value = tmpCell.getErrorCellValue() + "";
                                 break;
                         }
-                        cell.setCellValue(value);
+                        rowData.add(value);
                     } catch (Exception e) {
                         log.error("=> 에러 발생 !!1");
                         log.info("=> 셀 위치 : (" + i + "," + (j + 1) + "), 셀 타입 : " + tmpCell.getCellType() + ", 셀 값 : " + tmpCell.toString());
                     }
 
                 }
-
+                result.add(rowData);
             }
             log.info("=> 작업 파일 종료 : {}", filePath);
             file.close();
         }
-
+        return result;
     }
+
 
     private String cellReader(XSSFCell cell) {
         String value = "";
@@ -222,8 +230,8 @@ public class MakeExcelFileService {
     }
 
 
-    private void createHeader(XSSFSheet sheet, String baseFile) throws IOException {
-        XSSFRow row = sheet.createRow(0);
+    private void createHeader(SXSSFSheet sheet, String baseFile) throws IOException {
+        SXSSFRow row = (SXSSFRow) sheet.createRow(0);
 
         //File 읽기
         FileInputStream file = new FileInputStream(baseFile);
@@ -286,7 +294,7 @@ public class MakeExcelFileService {
         }
 
         if (localExcelFiles.get("baseFilePath").equals("")) {
-            localExcelFiles.put("baseFilePath", path + "\\" + folderSubFiles.get(0).getFolderName());
+            localExcelFiles.put("baseFilePath", path + "\\" + folderSubFiles.get(0).getFile().getFileName());
         }
 
 
