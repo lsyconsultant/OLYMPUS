@@ -45,60 +45,68 @@ public class MakeExcelFileService {
 
     public void execute(String yyyymm) {
 
-//        log.info("★★★★★★★★프로그램 시작★★★★★★★★");
-//
-//        log.info("==> 1단계 : [MS Graph API] 사용에 필요한 Access Token 가져오기");
-//        String accessToken = ms.getAccessToken();
-//        log.info("Access Token : {}", accessToken);
-//        if (accessToken.equals("")) {
-//            log.info("Access Token 가져오기 실패함!!!!!!!");
-//            return;
-//        }
-//
-//
-//        log.info("==> 2단계 : [MS Graph API] site.nam 속성을 이용하여, sharepoint id 가져오기");
-//        String siteId = ms.getSiteIdBySiteName(accessToken);
-//        log.info("Site Id : {}", siteId);
-//        if (accessToken.equals("")) {
-//            log.info("Site Id 가져오기 실패함!!!!!!!");
-//            return;
-//        }
-//
-//
-//        log.info("==> 3단계 : [MS Graph API] sharepoint id를 이용하여, BC별 매출 엑셀 파일 찾기");
-//        //지사별 엑셀파일이 없을 경우 에러는 나지 않지만, 매출 데이터 없다는 문자 메시지는 보내주는 것도 나쁘지 않을듯
-//        ArrayList<FolderDTO> folderSubFiles = ms.getFilesBcAmtData(yyyymm, siteId, accessToken);
-//        log.info("=> BC별 매출 엑셀 파일(FY22-FY24 May) 내의 지사별 매출 데이터 파일 : {}", folderSubFiles);
+        log.info("★★★★★★★★프로그램 시작★★★★★★★★");
 
-
-        log.info("==> 4단계 : [MS Graph API] 매출데이터 파일을 로컬로 다운로드");
-//        Map<String, String> localExcelFiles = fileUrlDownloadToLocalPath(folderSubFiles);
-        Map<String, String> localExcelFiles = new HashMap<>();
-        localExcelFiles.put("folderPath", "c:\\olympus\\20230626-160910");
-        localExcelFiles.put("baseFilePath", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OVN_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OVN_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OAZ_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OAZ_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OTH_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OTH_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OHC_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OHC_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OSP_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OSP_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OMSI_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OMSI_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OML_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OML_GIET_sales.xlsx");
-        localExcelFiles.put("202305_OKR_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
-        log.info("매출데이터 로컬 PC에 다운로드 완료 : ", localExcelFiles);
-
-
-        log.info("==> 5단계 : 매출데이터 파일들을 하나로 병합");
-        try {
-            excelDataMerge(localExcelFiles);
-        } catch (Exception e) {
-            e.printStackTrace();
+        log.info("==> 1단계 : [MS Graph API] 사용에 필요한 Access Token 가져오기");
+        String accessToken = ms.getAccessToken();
+        log.info("Access Token : {}", accessToken);
+        if (accessToken.equals("")) {
+            log.info("Access Token 가져오기 실패함!!!!!!!");
+            return;
         }
 
 
+        log.info("==> 2단계 : [MS Graph API] site.nam 속성을 이용하여, sharepoint id 가져오기");
+        String siteId = ms.getSiteIdBySiteName(accessToken);
+        log.info("Site Id : {}", siteId);
+        if (accessToken.equals("")) {
+            log.info("Site Id 가져오기 실패함!!!!!!!");
+            return;
+        }
+
+
+        log.info("==> 3단계 : [MS Graph API] sharepoint id를 이용하여, BC별 매출 엑셀 파일 찾기");
+        //지사별 엑셀파일이 없을 경우 에러는 나지 않지만, 매출 데이터 없다는 문자 메시지는 보내주는 것도 나쁘지 않을듯
+        ArrayList<FolderDTO> folderSubFiles = ms.getFilesBcAmtData(yyyymm, siteId, accessToken);
+        log.info("=> BC별 매출 엑셀 파일(FY22-FY24 May) 내의 지사별 매출 데이터 파일 : {}", folderSubFiles);
+
+
+        log.info("==> 4단계 : [MS Graph API] 매출데이터 파일을 로컬로 다운로드");
+        Map<String, String> localExcelFiles = fileUrlDownloadToLocalPath(folderSubFiles);
+//        Map<String, String> localExcelFiles = new HashMap<>();
+//        localExcelFiles.put("folderPath", "c:\\olympus\\20230626-160910");
+//        localExcelFiles.put("baseFilePath", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OVN_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OVN_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OAZ_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OAZ_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OTH_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OTH_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OHC_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OHC_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OSP_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OSP_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OMSI_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OMSI_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OML_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OML_GIET_sales.xlsx");
+//        localExcelFiles.put("202305_OKR_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
+//        log.info("매출데이터 로컬 PC에 다운로드 완료 : ", localExcelFiles);
+//
+//
+        log.info("==> 5단계 : 매출데이터 파일들을 하나로 병합 시작");
+        String mergeFilePath = "";
+        try {
+            mergeFilePath = excelDataMerge(localExcelFiles);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("병합된 파일 위치 : {}", mergeFilePath);
+        log.info("==> 5단계 : 매출데이터 파일들을 하나로 병합 종료");
+
+        //Merge file을 쉐어포인트에 업로드 실시
+        log.info("=> 6단계 : Merge 엑셀 파일 업로드 시작");
+        ms.uploadMergerFileToSharePoint(accessToken, siteId, mergeFilePath, yyyymm);
+        log.info("=> 6단계 : Merge 엑셀 파일 업로드 종료");
+
+        log.info("★★★★★★★★프로그램 종료★★★★★★★★");
     }
 
 
-    private void excelDataMerge(Map<String, String> localExcelFiles) throws IOException {
+    private String excelDataMerge(Map<String, String> localExcelFiles) throws IOException {
         String folderPath = localExcelFiles.get("folderPath");
         localExcelFiles.remove("folderPath");
 
@@ -123,8 +131,17 @@ public class MakeExcelFileService {
 
         //Merge 엑셀 파일 생성
         log.info("=> Merge 엑셀 파일 생성 시작");
+        String mergeFilePath = createMergeFile(folderPath, workbook, sheet, data);
+        log.info("=> Merge 엑셀 파일 생성 종료");
+
+        return mergeFilePath;
+
+    }
+
+
+    private String createMergeFile(String folderPath, SXSSFWorkbook workbook, SXSSFSheet sheet, ArrayList<List<String>> data) throws IOException {
+
         for (int i = 0; i < data.size(); i++) {
-//            log.info("=> 작업 로우 번호 : {}", i + 1);
             List<String> rowData = data.get(i);
 
             SXSSFRow row = (SXSSFRow) sheet.createRow(i + 1);
@@ -136,11 +153,14 @@ public class MakeExcelFileService {
             }
         }
 
-        File file = new File(folderPath+"\\매출통합본.xlsx");
+        String mergeFilePath = folderPath + "\\매출통합본.xlsx";
+        File file = new File(folderPath + "\\매출통합본.xlsx");
         FileOutputStream fileout = new FileOutputStream(file);
         workbook.write(fileout);
         fileout.close();
-        log.info("=> Merge 엑셀 파일 생성 종료");
+
+        log.info("지사별 매출 통합본 파일 위치 : {}", mergeFilePath);
+        return mergeFilePath;
 
     }
 
@@ -161,7 +181,7 @@ public class MakeExcelFileService {
             XSSFSheet tmpSheet = excel.getSheetAt(0);
 
             log.info("=> 작업 파일 작업 로우 갯수 : {}", tmpSheet.getLastRowNum());
-            for (int i = 1; i < tmpSheet.getLastRowNum()+1; i++) {
+            for (int i = 1; i < tmpSheet.getLastRowNum() + 1; i++) {
 //                log.info("=> 작업 로우 번호 : {}", i);
 
                 List<String> rowData = new ArrayList<>();

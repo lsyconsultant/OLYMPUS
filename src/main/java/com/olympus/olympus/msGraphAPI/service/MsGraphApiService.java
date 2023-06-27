@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,6 +36,10 @@ public class MsGraphApiService {
     private String siteGrantType;
     @Value("${site.resource}")
     private String siteResource;
+    @Value("${site.bcAmtDataDirectoryId}")
+    private String bcAmtDataDirectoryId;
+    @Value("${site.masterFileDirectoryId}")
+    private String masterFileDirectoryId;
 
 
     public String getAccessToken() {
@@ -67,7 +74,7 @@ public class MsGraphApiService {
         String siteUrl = "https://graph.microsoft.com/v1.0/sites/" + siteId;
 
         //BC별 매출 엑셀 파일(FY22-FY24 May) 폴더 리스트 URL : 01CEJY2NN7ODBWVMUYKFHYD6IY257OKXAQ -> 폴더ID
-        String msBcAmtDataDirectoryUrl = siteUrl + "/drive/items/01CEJY2NN7ODBWVMUYKFHYD6IY257OKXAQ/children";
+        String msBcAmtDataDirectoryUrl = siteUrl + "/drive/items/" + bcAmtDataDirectoryId + "/children";
         Map<String, Object> response = httpRequest.getRequest(msBcAmtDataDirectoryUrl, accessToken);
 
         ArrayList<Map<String, String>> list = (ArrayList<Map<String, String>>) response.get("value");
@@ -109,5 +116,23 @@ public class MsGraphApiService {
         return folders;
     }
 
+    public void uploadMergerFileToSharePoint(String accessToken, String siteId, String mergeFilePath, String yyyymm) {
+        String siteUrl = "https://graph.microsoft.com/v1.0/sites/" + siteId;
+
+        //업로드 세션 URL 얻기
+        String[] temp2 = mergeFilePath.split("\\\\");
+        String uploadFileName = yyyymm + "_" + temp2[temp2.length - 1];
+        log.info("업로드 파일명 : {}", uploadFileName);
+
+        String temp = siteUrl + "/drive/items/" + masterFileDirectoryId + ":/" + uploadFileName + ":/createUploadSession";
+        String sessionUrl = httpRequest.getUploadSessionUrl(temp, accessToken);
+        log.info("createUploadSession URL : {}", sessionUrl);
+
+        if (sessionUrl.equals("")) return;
+
+        //마스터파일 ID : 01CEJY2NO37RL4GRRTHBEKAQVDM4MVBFCD -> 폴더ID
+        Map<String, Object> response = httpRequest.multiPartRequest(sessionUrl, accessToken, mergeFilePath);
+        log.info("업로드 결과 : {}", response.toString());
+    }
 
 }
