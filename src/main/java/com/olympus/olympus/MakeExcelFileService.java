@@ -5,6 +5,7 @@ import com.olympus.olympus.msGraphAPI.dto.FolderDTO;
 import com.olympus.olympus.msGraphAPI.service.MsGraphApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
@@ -198,7 +199,16 @@ public class MakeExcelFileService {
                                 value = tmpCell.getCellFormula();
                                 break;
                             case XSSFCell.CELL_TYPE_NUMERIC:
-                                value = tmpCell.getNumericCellValue() + "";
+                                if(DateUtil.isCellDateFormatted(tmpCell)){
+                                    // 날짜 형식으로 변환
+                                    Date date = tmpCell.getDateCellValue();
+                                    // 원하는 날짜 형식으로 포맷팅
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                    value = dateFormat.format(date);
+                                }else{
+                                    value = tmpCell.getNumericCellValue() + "";
+                                }
+
                                 break;
                             case XSSFCell.CELL_TYPE_STRING:
                                 value = tmpCell.getStringCellValue() + "";
