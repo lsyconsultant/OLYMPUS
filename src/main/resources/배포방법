@@ -1,6 +1,6 @@
 1. 이수용 PC의  C:\olympus 폴더를 복사하여, 조은수님 PC에 복사한다.
 
 2. 작업 스케쥴러를 실행하여 아래 명령어를 로그인 할 때 실행되도록 구성하면 된다.
-  C:\olympus\jdk-19.0.1\bin\javaw_olympus.exe -Xmx10240m -jar C:\olympus\olympus.jar
+  C:\olympus\jdk-19.0.1\bin\javaw_olympus.exe -Xmx5120m -jar C:\olympus\olympus.jar
 
 3. 정상적인 실행이 되었다면, 작업관리자>세부정보 에 [ javaw_olympus.exe ]가 실행되어 있을 것이다.

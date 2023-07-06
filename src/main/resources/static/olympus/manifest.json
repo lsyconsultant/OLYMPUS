@@ -1,0 +1,76 @@
+{
+  "_version": "1.0.0",
+  "sap.app": {
+    "id": "sap.ui.olympus",
+    "type": "application",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [
+        ""
+      ],
+      "fallbackLocale": ""
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "applicationVersion": {
+      "version": "1.0.0"
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "sap.ui.olympus.view.framework.App",
+      "type": "XML",
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.96.3",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {}
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "path": "sap.ui.olympus.view",
+        "controlId": "NavContainer",
+        "controlAggregation": "pages",
+        "transition": "fade",
+        "bypassed": {
+          "target": "notFound"
+        }
+      },
+      "routes": {
+        "home": {
+          "pattern": "",
+          "target": "bcAmtMerge"
+        },
+        "bcAmtMerge": {
+          "pattern": "bcAmtMerge",
+          "target": "bcAmtMerge"
+        },
+        "businessSetting": {
+          "pattern": "businessSetting",
+          "target": "businessSetting"
+        }
+
+      },
+      "targets": {
+        "bcAmtMerge": {
+          "id": "bcAmtMerge",
+          "name": "bcAmtMerge.bcAmtMerge"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,178 @@
+<mvc:View
+        controllerName="sap.ui.olympus.controller.bcAmtMerge.bcAmtMerge"
+        xmlns="sap.m"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:f="sap.ui.layout.form"
+        xmlns:u="sap.ui.unified">
+
+    <Page
+            title="BC 매출 데이터 합치기"
+            class=""
+            showHeader="false">
+        <content>
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ResponsiveGridLayout
+                            labelSpanXL="4"
+                            labelSpanL="4"
+                            labelSpanM="12"
+                            labelSpanS="12"
+                            adjustLabelSpan="false"
+                            emptySpanXL="0"
+                            emptySpanL="0"
+                            emptySpanM="0"
+                            emptySpanS="0"
+                            columnsXL="2"
+                            columnsL="2"
+                            columnsM="1"
+                            singleContainerFullSize="false"/>
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer title="Step1.병합할 데이터">
+                        <f:formElements>
+                            <f:FormElement label="이전달 마스터 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="baseFile" name="file" sameFilenameAllowed="true"
+                                                        fileType="csv" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="baseFileLabel" text="{/baseFile}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="한국_OKR 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OKR" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OKRLabel" text="{/OKR}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="말레이시아_OML 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OML" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OMLLabel" text="{/OML}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="베트남_OVN 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OVN" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OVNLabel" text="{/OVN}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="싱가포르_OSP 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OSP" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OSPLabel" text="{/OSP}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="인도_OMSI 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OMSI" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OMSILabel" text="{/OMSI}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="태국_OTH 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OTH" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OTHLabel" text="{/OTH}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="호주_OAZ 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OAZ" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OAZLabel" text="{/OAZ}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="홍콩_OHC 매출 파일">
+                                <f:fields>
+                                    <HBox class="HBox1">
+                                        <u:FileUploader id="OHC" name="file" sameFilenameAllowed="true"
+                                                        fileType="xlsx" uploadOnChange="true" uploadUrl="/upload.do"
+                                                        uploadComplete="handleUploadComplete"
+                                                        uploadProgress="handleUploadProgress"
+                                                        sendXHR="true"
+                                                        buttonOnly="true"/>
+                                        <Label id="OHCLabel" text="{/OHC}"/>
+                                    </HBox>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                    <f:FormContainer title="Step2.병합 결과">
+                        <f:formElements>
+                            <f:FormElement label="마스터 파일">
+                                <f:fields>
+                                    <Input id="masterFileLink" editable="false"/>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="">
+                                <f:fields>
+                                    <Button text="병합 시작" type="Emphasized" press="onMergeStart"/>
+                                </f:fields>
+                            </f:FormElement>
+                            <f:FormElement label="">
+                                <f:fields>
+                                    <Label text="※한국 OKR 매출 파일을 기준으로 헤더를 생성합니다"/>
+                                </f:fields>
+                            </f:FormElement>
+                        </f:formElements>
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+
+        </content>
+    </Page>
+
+
+</mvc:View>

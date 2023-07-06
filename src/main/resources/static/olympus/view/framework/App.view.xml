@@ -1,0 +1,46 @@
+<mvc:View
+        controllerName="sap.ui.olympus.controller.framework.App"
+        xmlns="sap.m"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:tnt="sap.tnt"
+        xmlns:f="sap.ui.layout.form"
+        xmlns:core="sap.ui.core">
+
+
+    <!-- 메인화면 -->
+    <App id="app" >
+        <tnt:ToolPage id="toolPage" visible="true">
+            <tnt:header>
+                <tnt:ToolHeader>
+                    <Button id="sideNavigationToggleButton" icon="sap-icon://menu2" type="Transparent"
+                            press=".onSideNavButtonPress"/>
+                    <Button text="EICS" class="logoStyle" type="Transparent" press="onGotoHome"/>
+                    <ToolbarSpacer/>
+                    <Button id="userButton" text="로그아웃" type="Transparent" press="onLogout"/>
+                </tnt:ToolHeader>
+            </tnt:header>
+            <tnt:sideContent>
+                <tnt:SideNavigation
+                        expanded="true"
+                        itemSelect=".onItemSelect">
+                    <tnt:NavigationList>
+                        <tnt:NavigationListItem text="BC 매출 병합" key="bcAmtMerge"/>
+                        <tnt:NavigationListItem text="비즈니스 설정" key="businessSetting"/>
+                        <tnt:NavigationListItem text="캠페인 조회" key="campaignSearch"/>
+                    </tnt:NavigationList>
+                </tnt:SideNavigation>
+            </tnt:sideContent>
+            <tnt:mainContents>
+                <NavContainer id="NavContainer">
+                    <pages>
+                        <!-- Added by the router -->
+                    </pages>
+                </NavContainer>
+            </tnt:mainContents>
+        </tnt:ToolPage>
+    </App>
+
+
+
+
+</mvc:View>

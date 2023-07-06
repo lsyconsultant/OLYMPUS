@@ -1,0 +1,36 @@
+<mvc:View
+        controllerName="sap.ui.olympus.controller.framework.businessSetting"
+        xmlns="sap.m"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns:tnt="sap.tnt"
+        xmlns:f="sap.ui.layout.form"
+        xmlns:core="sap.ui.core"
+        xmlns:t="sap.ui.table">
+
+    <t:Table rows="{/wizard/step6/keyword_brand_list}" visibleRowCount="13"
+             selectionMode="None" class="sapUiSizeCompact">
+        <t:extension>
+            <OverflowToolbar style="Clear">
+                <Title title="필요한 정보를 개발하면서 구성하면 됩니다~"/>
+                <ToolbarSpacer/>
+                <Button text="신규" />
+            </OverflowToolbar>
+        </t:extension>
+        <t:columns>
+            <t:Column width="auto">
+                <Label text="비즈니스"/>
+                <t:template>
+                    <Text text="{cust_keyword}"/>
+                </t:template>
+            </t:Column>
+            <t:Column width="auto">
+                <Label text="상태"/>
+                <t:template>
+                    <Text text="{cust_keyword}"/>
+                </t:template>
+            </t:Column>
+        </t:columns>
+    </t:Table>
+
+
+</mvc:View>

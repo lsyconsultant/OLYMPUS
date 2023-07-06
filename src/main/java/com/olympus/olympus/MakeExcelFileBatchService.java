@@ -16,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -30,7 +29,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class MakeExcelFileService {
+public class MakeExcelFileBatchService {
 
     @Autowired
     MsGraphApiService ms;
@@ -38,8 +37,7 @@ public class MakeExcelFileService {
     @Value("${projectFolder}")
     private String projectFolder;
 
-
-    @Scheduled(fixedDelay = 6000000) // 10초마다 실행
+    //    @Scheduled(fixedDelay = 6000000) // 10초마다 실행
     public void scheduleExecute() {
         execute("202305");
     }
@@ -86,8 +84,8 @@ public class MakeExcelFileService {
 //        localExcelFiles.put("202305_OML_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OML_GIET_sales.xlsx");
 //        localExcelFiles.put("202305_OKR_GIET_sales.xlsx", "c:\\olympus\\20230626-160910\\202305_OKR_GIET_sales.xlsx");
 //        log.info("매출데이터 로컬 PC에 다운로드 완료 : ", localExcelFiles);
-//
-//
+
+
         log.info("==> 5단계 : 매출데이터 파일들을 하나로 병합 시작");
         String mergeFilePath = "";
         try {
@@ -105,7 +103,6 @@ public class MakeExcelFileService {
 
         log.info("★★★★★★★★프로그램 종료★★★★★★★★");
     }
-
 
     private String excelDataMerge(Map<String, String> localExcelFiles) throws IOException {
         String folderPath = localExcelFiles.get("folderPath");
@@ -138,7 +135,6 @@ public class MakeExcelFileService {
         return mergeFilePath;
 
     }
-
 
     private String createMergeFile(String folderPath, SXSSFWorkbook workbook, SXSSFSheet sheet, ArrayList<List<String>> data) throws IOException {
 
@@ -199,13 +195,13 @@ public class MakeExcelFileService {
                                 value = tmpCell.getCellFormula();
                                 break;
                             case XSSFCell.CELL_TYPE_NUMERIC:
-                                if(DateUtil.isCellDateFormatted(tmpCell)){
+                                if (DateUtil.isCellDateFormatted(tmpCell)) {
                                     // 날짜 형식으로 변환
                                     Date date = tmpCell.getDateCellValue();
                                     // 원하는 날짜 형식으로 포맷팅
                                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     value = dateFormat.format(date);
-                                }else{
+                                } else {
                                     value = tmpCell.getNumericCellValue() + "";
                                 }
 
@@ -235,7 +231,6 @@ public class MakeExcelFileService {
         return result;
     }
 
-
     private String cellReader(XSSFCell cell) {
         String value = "";
 
@@ -258,7 +253,6 @@ public class MakeExcelFileService {
         }
         return value;
     }
-
 
     private void createHeader(SXSSFSheet sheet, String baseFile) throws IOException {
         SXSSFRow row = (SXSSFRow) sheet.createRow(0);
@@ -330,6 +324,7 @@ public class MakeExcelFileService {
 
         return localExcelFiles;
     }
+
 
 
 }

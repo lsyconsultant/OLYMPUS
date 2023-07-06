@@ -1,0 +1,7 @@
+.HBox1 {
+    align-items: center !important;
+}
+
+.HBox1 > div {
+    padding-right: 15px !important;
+}
